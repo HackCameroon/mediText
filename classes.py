@@ -53,22 +53,9 @@ def patient_exist(name, birthday):
     if current_patient == "NA":
         return False
 
-def prescribe(current_doctor, patient, drug):
-    not_exist = True
-    current_drug = "NA"
-    while (not_exist):
-        for i in drugs:
-            if (i == drug):
-                not_exist = False
-                current_drug = i
-        if (not_exist):
-            print("Prescription does not exist!")
-    message = input("Message to be included with text reminder: ")
+def prescribe(current_doctor, patient, drug, message):
     usage = time.time()
-    strict_dosage = input("Please indicate whether patient has a strict dosage (True/False): ")
-
     drug_object = Drug(current_drug,message,usage)
-
     if (bool(strict_dosage)):
         drug_object.change_strict()
     current_patient.assign_drug(drug_object)

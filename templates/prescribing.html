@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Register Page{% endblock %}
+{% block content %}
+
+<br>
+
+<body>
+	<form action ="/prescribing" style="width:500px; margin:auto" method="POST">
+	<div class="form-group">
+		<span class="input-group-text" id="basic-addon1">Please enter the prescribing drug for patient: </span>
+		<input type="text" name="drug" id="drug" class="form-control" placeholder="Drug">
+	<br>
+	<span class="input-group-text" id="basic-addon1">Dosage</span>
+        <input type="text" name="dosage" id="dosage" class="form-control" placeholder="Prescribed Dosage">
+    <br>
+    <span class="input-group-text" id="basic-addon1">Comments</span>
+        <input type="text" name="comments" id="comments" class="form-control" placeholder="Place any comments you have for the patient here">
+    </div>
+    
+	<center><button type="submit" class="btn btn-primary" style="width:500px; margin:auto">Submit</button></center>
+	</form>
+</body> 
+
+{% endblock %}
+
+

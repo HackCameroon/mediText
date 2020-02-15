@@ -2,7 +2,7 @@ from flask import Flask, url_for, render_template, request
 import classes
 
 app = Flask(__name__)
-
+current_patient = ''
 @app.route('/')
 def home():
     return render_template('base.html')
@@ -17,7 +17,7 @@ def register():
     return render_template('doc.html')
 
 @app.route('/prescribe', methods = ["POST", "GET"])
-def prescribe():
+def pres():
     global current_patient
     if request.method == 'POST':
         name = request.form['name']
@@ -26,6 +26,20 @@ def prescribe():
             current_patient = classes.patient_exist(name, bday)
 
     return render_template('prescribe.html')
+
+@app.route('/prescribing', methods = ["POST", "GET"])
+def prescribing():
+    global current_patient
+    if request.method == 'POST':
+        drug = request.form['drug']
+        dosage = request.form['dosage']
+        comments = request.form['comments']
+        
+        new_doctor = classes.Doctor("John Smith","John", "Smith", "5555555555")
+        classes.prescribe(new_doctor, current_patient, drug, comments)
+        print(classes.prescribed.keys())
+
+    return render_template('prescribing.html')
 
 
 if __name__ == "__main__":
