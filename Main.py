@@ -3,6 +3,9 @@ doctors = []
 prescribe = {}
 ID_COUNT = 0
 
+drugs_txt = open("drugs.txt",'r')
+drugs = [(line.lower()).rstrip("\n") for line in drugs_txt.readlines()]
+
 class Doctor:
     def __init__(self, name, username, password, phone):
         self.name = name
@@ -51,18 +54,18 @@ def prescribe(current_doctor):
         not_exist = True
         current_drug = "NA"
         while (not_exist):
-            drug = input("Please input prescription name: ")
+            drug = input("Please input prescription name: ").lower()
             for i in drugs:
                 if (i.name == drug):
                     not_exist = False
                     current_drug = i
             if (not_exist):
                 print("Prescription does not exist!")
-    current_patient.assign_drug(current_drug)
-    prescribe[current_doctor] = current_patient
+        current_patient.assign_drug(current_drug)
+        prescribe[current_doctor] = current_patient
 
 def doctor_login():
-    t= True
+    t = True
     while (t):
         doctor_username = input("Please input your username: ")
         doctor_password = input("Please input your password: ")
@@ -87,4 +90,5 @@ if __name__ == '__main__':
             add()
         else:
             print("Invalid choice!")
+
 
