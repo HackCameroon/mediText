@@ -29,6 +29,7 @@ def pres():
         bday = request.form['bday']
         if classes.patient_exist(name, bday) != False:
             current_patient = classes.patient_exist(name, bday)
+            return render_template('prescribing.html')
 
     return render_template('prescribe.html')
 
