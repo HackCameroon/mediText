@@ -4,6 +4,10 @@ import classes
 app = Flask(__name__)
 current_patient = ''
 @app.route('/')
+def base():
+    return render_template('base.html')
+
+@app.route('/home')
 def home():
     return render_template('base.html')
 
