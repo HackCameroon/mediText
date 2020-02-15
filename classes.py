@@ -1,3 +1,5 @@
+import time
+
 patients = []
 doctors = []
 prescribed = {}
@@ -27,10 +29,10 @@ class Patient:
         self.drug = drug
 
 class Drug:
-    def __init__(self, name, message, useage, strict_dosage):
+    def __init__(self, name, message, usage, strict_dosage):
         self.name = name
         self.message = message
-        self.useage = useage
+        self.usage = usage
         self.strict_dosage = strict_dosage
 
 def add():
@@ -65,9 +67,10 @@ def prescribe(current_doctor):
             if (not_exist):
                 print("Prescription does not exist!")
         message = input("Message to be included with text reminder: ")
-        usage = 2
-        strict_dosage = False
-        drug_object = Drug(current_drug,message,usage,strict_dosage)
+        usage = time.time()
+        strict_dosage = input("Please indicate whether patient has a strict dosage (True/False): ")
+
+        drug_object = Drug(current_drug,message,usage,bool(strict_dosage))
         current_patient.assign_drug(drug_object)
         prescribed[current_patient.firstname + " " + current_patient.lastname] = current_doctor.name
 
@@ -83,6 +86,16 @@ def doctor_login():
             else:
                 print("Invalid login credentials!")
 
+def check_message():
+    for p in prescribed.keys():
+        for i in patients:
+            if p.split(" ")[0] == i.firstname and p.split(" ")[1] == i.lastname:
+                current = i
+                if (time.time() - i.drug.usage) >= 30:
+                    print("Sent Text Message")
+                    i.drug.usage = time.time()
+
+
 if __name__ == '__main__':
 
     new_doctor = Doctor("John Smith","John", "Smith", "5555555555")
@@ -94,7 +107,9 @@ if __name__ == '__main__':
 
     
     current_doctor = doctor_login()
+
     while True:
+        check_message()
         to_do = input("Please input what you would like to do 'prescribe' or 'add': ").lower()
         if to_do == "prescribe":
             prescribe(current_doctor)
