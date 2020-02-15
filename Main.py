@@ -1,4 +1,5 @@
-from flask import Flask, url_for, render_template
+from flask import Flask, url_for, render_template, request
+
 
 app = Flask(__name__)
 
@@ -6,12 +7,16 @@ app = Flask(__name__)
 def home():
     return render_template('base.html')
 
-@app.route('/register/', methods = ["POST", "GET"])
+@app.route('/register', methods = ["POST", "GET"])
 def register():
     return render_template('doc.html')
 
-@app.route('/prescribe/', methods = ["POST", "GET"])
+@app.route('/prescribe', methods = ["POST", "GET"])
 def prescribe():
+    if request.method == 'POST':
+        name = request.form['name']
+        bday = request.form['bday']
+        print(name, bday)
     return render_template('prescribe.html')
 
 

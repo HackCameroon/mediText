@@ -4,7 +4,21 @@
 
 <br>
 
-<div class="input-group mb-3">
+<body>
+	<form action ="/prescribe" style="width:500px; margin:auto" method="POST">
+	<div class="form-group">
+		<span class="input-group-text" id="basic-addon1">Please input patient's first name and last name: </span>
+		<input type="text" name="name" id="name" class="form-control" placeholder="Peter Anteater">
+	<br>
+	<span class="input-group-text" id="basic-addon1">Please input patient's birthday: </span>
+		<input type="text" name="bday" id="bday" class="form-control" placeholder="MMDDYYYY">
+	</div>
+	<center><button type="submit" class="btn btn-primary" style="width:500px; margin:auto">Submit</button></center>
+	</form>
+</body> 
+
+
+<!-- <div class="input-group mb-3">
 	<div class="input-group-prepend">
 	  <span class="input-group-text" id="basic-addon1">Please input patient's first name and last name: </span>
 	</div>
@@ -19,7 +33,7 @@
 	<input type="text" class="form-control" placeholder="MMDDYYYY" aria-label="birth" aria-describedby="basic-addon1">
   </div>
 
-  <button type="button" class="btn btn-secondary btn-lg btn-block">Look Up Paient</button>
+  <button type="button" class="btn btn-secondary btn-lg btn-block">Register</button> -->
 {% endblock %}
 
->
+
