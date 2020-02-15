@@ -69,7 +69,7 @@ def prescribe(current_doctor):
         strict_dosage = False
         drug_object = Drug(current_drug,message,usage,strict_dosage)
         current_patient.assign_drug(drug_object)
-        prescribed[current_doctor.name] = current_patient.firstname + " " + current_patient.lastname
+        prescribed[current_patient.firstname + " " + current_patient.lastname] = current_doctor.name
 
 def doctor_login():
     t = True
