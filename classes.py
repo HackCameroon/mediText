@@ -38,47 +38,41 @@ class Drug:
     def change_strict(self):
         self.strict_dosage = True
 
-def add():
+def add(patient_name, patient_birthday, patient_phone):
     global ID_COUNT
-    patient_name = input("Please input patient's first name and last name: ").lower()
-    patient_birthday = input("Please input patient's birthday as MMDDYYYY: ")
-    patient_phone = input("Please input patient's phone number: ")
     new_patient = Patient(patient_name, patient_birthday, patient_phone)
     patients.append(new_patient)
     ID_COUNT += 1
 
-def prescribe(current_doctor):
-    global drugs, prescribed
-    patient_name = input("Please input patient's first name and last name: ").lower()
-    patient_birthday = input("Please input patient's birthday as MMDDYYYY: ")
+def patient_exist(name, birthday):
     current_patient = "NA"
     for i in patients:
-        patient_name_split = patient_name.split(" ")
-        if (i.firstname == patient_name_split[0] and i.lastname == patient_name_split[1] and i.birthday == patient_birthday):
-            current_patient = i
+        patient_name_split = name.split(" ")
+        if (i.firstname == patient_name_split[0] and i.lastname == patient_name_split[1] and i.birthday == birthday):
+            return i
     if current_patient == "NA":
-        print("Invalid Patient")
-    else:
-        not_exist = True
-        current_drug = "NA"
-        while (not_exist):
-            drug = input("Please input prescription name: ").lower()
-            for i in drugs:
-                if (i == drug):
-                    not_exist = False
-                    current_drug = i
-            if (not_exist):
-                print("Prescription does not exist!")
-        message = input("Message to be included with text reminder: ")
-        usage = time.time()
-        strict_dosage = input("Please indicate whether patient has a strict dosage (True/False): ")
+        return False
 
-        drug_object = Drug(current_drug,message,usage)
+def prescribe(current_doctor, patient, drug):
+    not_exist = True
+    current_drug = "NA"
+    while (not_exist):
+        for i in drugs:
+            if (i == drug):
+                not_exist = False
+                current_drug = i
+        if (not_exist):
+            print("Prescription does not exist!")
+    message = input("Message to be included with text reminder: ")
+    usage = time.time()
+    strict_dosage = input("Please indicate whether patient has a strict dosage (True/False): ")
 
-        if (bool(strict_dosage)):
-            drug_object.change_strict()
-        current_patient.assign_drug(drug_object)
-        prescribed[current_patient.firstname + " " + current_patient.lastname] = current_doctor.name
+    drug_object = Drug(current_drug,message,usage)
+
+    if (bool(strict_dosage)):
+        drug_object.change_strict()
+    current_patient.assign_drug(drug_object)
+    prescribed[current_patient.firstname + " " + current_patient.lastname] = current_doctor.name
 
 def doctor_login():
     t = True
@@ -114,14 +108,5 @@ if __name__ == '__main__':
     
     current_doctor = doctor_login()
 
-    while True:
-        check_message()
-        to_do = input("Please input what you would like to do 'prescribe' or 'add': ").lower()
-        if to_do == "prescribe":
-            prescribe(current_doctor)
-        elif to_do == "add":
-            add()
-        else:
-            print("Invalid choice!")
 
 
