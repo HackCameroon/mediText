@@ -3,6 +3,7 @@ import classes
 
 app = Flask(__name__)
 current_patient = ''
+
 @app.route('/')
 def base():
     return render_template('base.html')
@@ -33,7 +34,6 @@ def pres():
 
 @app.route('/prescribing', methods = ["POST", "GET"])
 def prescribing():
-    global current_patient
     if request.method == 'POST':
         drug = request.form['drug']
         dosage = request.form['dosage']
@@ -41,7 +41,6 @@ def prescribing():
         
         new_doctor = classes.Doctor("John Smith","John", "Smith", "5555555555")
         classes.prescribe(new_doctor, current_patient, drug, comments)
-        print(classes.prescribed.keys())
 
     return render_template('prescribing.html')
 

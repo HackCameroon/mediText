@@ -43,23 +43,36 @@ def add(patient_name, patient_birthday, patient_phone):
     new_patient = Patient(patient_name, patient_birthday, patient_phone)
     patients.append(new_patient)
     ID_COUNT += 1
+    
 
 def patient_exist(name, birthday):
     current_patient = "NA"
+    patient_name_split = name.split(" ")
     for i in patients:
-        patient_name_split = name.split(" ")
-        if (i.firstname == patient_name_split[0] and i.lastname == patient_name_split[1] and i.birthday == birthday):
+        if (i.firstname == patient_name_split[0].lower() and i.lastname == patient_name_split[1].lower() and i.birthday == birthday):
             return i
     if current_patient == "NA":
         return False
 
 def prescribe(current_doctor, patient, drug, message):
+    not_exist = True
+    current_drug = "NA"
+    while (not_exist):
+        for i in drugs:
+            if (i == drug.lower()):
+                not_exist = False
+                current_drug = i
+        if (not_exist):
+            print("Prescription does not exist!")
     usage = time.time()
+    # strict_dosage = input("Please indicate whether patient has a strict dosage (True/False): ")
+
     drug_object = Drug(current_drug,message,usage)
-    if (bool(strict_dosage)):
-        drug_object.change_strict()
-    current_patient.assign_drug(drug_object)
-    prescribed[current_patient.firstname + " " + current_patient.lastname] = current_doctor.name
+
+    # if (bool(strict_dosage)):
+    #     drug_object.change_strict()
+    patient.assign_drug(drug_object)
+    prescribed[patient.firstname + " " + patient.lastname] = current_doctor.name
 
 def doctor_login():
     t = True
