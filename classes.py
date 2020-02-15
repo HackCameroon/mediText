@@ -29,11 +29,14 @@ class Patient:
         self.drug = drug
 
 class Drug:
-    def __init__(self, name, message, usage, strict_dosage):
+    def __init__(self, name, message, usage):
         self.name = name
         self.message = message
         self.usage = usage
-        self.strict_dosage = strict_dosage
+        self.strict_dosage = False
+    
+    def change_strict(self):
+        self.strict_dosage = True
 
 def add():
     global ID_COUNT
@@ -70,7 +73,10 @@ def prescribe(current_doctor):
         usage = time.time()
         strict_dosage = input("Please indicate whether patient has a strict dosage (True/False): ")
 
-        drug_object = Drug(current_drug,message,usage,bool(strict_dosage))
+        drug_object = Drug(current_drug,message,usage)
+
+        if (bool(strict_dosage)):
+            drug_object.change_strict()
         current_patient.assign_drug(drug_object)
         prescribed[current_patient.firstname + " " + current_patient.lastname] = current_doctor.name
 

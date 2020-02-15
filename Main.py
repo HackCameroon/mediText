@@ -10,7 +10,7 @@ def home():
 def register():
     return render_template('doc.html')
 
-@app.route('/prescribe/')
+@app.route('/prescribe/', methods = ["POST", "GET"])
 def prescribe():
     return render_template('prescribe.html')
 
