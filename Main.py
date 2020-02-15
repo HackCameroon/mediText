@@ -1,10 +1,11 @@
 patients = []
 doctors = []
-prescribe = {}
+prescribed = {}
 ID_COUNT = 0
 
 drugs_txt = open("drugs.txt",'r')
 drugs = [(line.lower()).rstrip("\n") for line in drugs_txt.readlines()]
+
 
 class Doctor:
     def __init__(self, name, username, password, phone):
@@ -16,8 +17,8 @@ class Doctor:
 class Patient:
     def __init__(self, name, birthday, phone):
         name_split = name.split(" ")
-        self.firstname = name_split[0]
-        self.lastname = name_split[1]
+        self.firstname = name_split[0].lower()
+        self.lastname = name_split[1].lower()
         self.birthday = birthday
         self.phone = phone
         self.ID = ID_COUNT
@@ -41,12 +42,13 @@ def add():
     ID_COUNT += 1
 
 def prescribe(current_doctor):
-    global drugs
+    global drugs, prescribed
     patient_name = input("Please input patient's first name and last name: ").lower()
     patient_birthday = input("Please input patient's birthday as MMDDYYYY: ")
     current_patient = "NA"
     for i in patients:
-        if (i.firstname == patient_name.split(" ")[0] and i.lastname == patient_name.split(" ")[1] and i.birthday == patient_birthday):
+        patient_name_split = patient_name.split(" ")
+        if (i.firstname == patient_name_split[0] and i.lastname == patient_name_split[1] and i.birthday == patient_birthday):
             current_patient = i
     if current_patient == "NA":
         print("Invalid Patient")
@@ -56,13 +58,13 @@ def prescribe(current_doctor):
         while (not_exist):
             drug = input("Please input prescription name: ").lower()
             for i in drugs:
-                if (i.name == drug):
+                if (i == drug):
                     not_exist = False
                     current_drug = i
             if (not_exist):
                 print("Prescription does not exist!")
         current_patient.assign_drug(current_drug)
-        prescribe[current_doctor] = current_patient
+        prescribed[current_doctor.name] = current_patient.firstname
 
 def doctor_login():
     t = True
@@ -81,6 +83,11 @@ if __name__ == '__main__':
     new_doctor = Doctor("John Smith","John", "Smith", "5555555555")
     doctors.append(new_doctor)
 
+    new_patient = Patient("Kyle Bui", "11111111", "5555555555")
+    patients.append(new_patient)
+    ID_COUNT += 1
+
+    
     current_doctor = doctor_login()
     while True:
         to_do = input("Please input what you would like to do 'prescribe' or 'add': ").lower()
