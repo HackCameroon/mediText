@@ -26,9 +26,10 @@ class Patient:
     def assign_drug(self, drug):
         self.drug = drug
 
-class drug:
-    def __init__(self, name, useage, strict_dosage):
+class Drug:
+    def __init__(self, name, message, useage, strict_dosage):
         self.name = name
+        self.message = message
         self.useage = useage
         self.strict_dosage = strict_dosage
 
@@ -63,8 +64,12 @@ def prescribe(current_doctor):
                     current_drug = i
             if (not_exist):
                 print("Prescription does not exist!")
-        current_patient.assign_drug(current_drug)
-        prescribed[current_doctor.name] = current_patient.firstname
+        message = input("Message to be included with text reminder: ")
+        usage = 2
+        strict_dosage = False
+        drug_object = Drug(current_drug,message,usage,strict_dosage)
+        current_patient.assign_drug(drug_object)
+        prescribed[current_doctor.name] = current_patient.firstname + " " + current_patient.lastname
 
 def doctor_login():
     t = True
