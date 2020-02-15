@@ -9,6 +9,11 @@ def home():
 
 @app.route('/register', methods = ["POST", "GET"])
 def register():
+    if request.method == 'POST':
+        name = request.form['name']
+        bday = request.form['bday']
+        number = request.form['number']
+        print(name, bday, number)
     return render_template('doc.html')
 
 @app.route('/prescribe', methods = ["POST", "GET"])

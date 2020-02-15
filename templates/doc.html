@@ -4,32 +4,24 @@
 
 <br>
 
-<div class="input-group mb-3">
-	<div class="input-group-prepend">
-	  <span class="input-group-text" id="basic-addon1">Please input patient's first name and last name: </span>
+<body>
+	<form action ="/register" style="width:500px; margin:auto" method="POST">
+	<div class="form-group">
+		<span class="input-group-text" id="basic-addon1">Please input patient's first name and last name: </span>
+		<input type="text" name="name" id="name" class="form-control" placeholder="Peter Anteater">
+	<br>
+
+	<span class="input-group-text" id="basic-addon1">Please input patient's birthday: </span>
+		<input type="text" name="bday" id="bday" class="form-control" placeholder="MMDDYYYY">
+
+	<br>
+
+	<span class="input-group-text" id="basic-addon1">Please input patient's phone number: </span>
+		<input type="text" name="number" id="number" class="form-control" placeholder="5555555555">
+
 	</div>
-	<input type="text" class="form-control" placeholder="Peter Anteater" aria-label="nme" id= "nme" aria-describedby="basic-addon1">
-  </div>
-
-
-  <div class="input-group mb-3">
-	<div class="input-group-prepend">
-	  <span class="input-group-text" id="basic-addon1">Please input patient's birthday: </span>
-	</div>
-	<input type="text" class="form-control" placeholder="MMDDYYYY" aria-label="birth" id= "birth" aria-describedby="basic-addon1">
-  </div>
-
-
-  <div class="input-group mb-3">
-	<div class="input-group-prepend">
-	  <span class="input-group-text" id="basic-addon1">Please input patient's phone number: </span>
-	</div>
-	<input type="text" class="form-control" placeholder="5555555555" aria-label="phone" id= "phone" aria-describedby="basic-addon1">
-  </div>
-
-  <button type="submit" class="btn btn-secondary btn-lg btn-block">Register</button>
-
+	<center><button type="submit" class="btn btn-primary" style="width:500px; margin:auto">Submit</button></center>
+	</form>
+</body> 
 
 {% endblock %}
-
->
