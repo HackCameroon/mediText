@@ -31,7 +31,10 @@ class Patient:
 class Drug:
     def __init__(self, name, message, usage):
         self.name = name
-        self.message = message
+        if len(message) > 0:
+            self.message = message
+        else:
+            self.message = "NONE"
         self.usage = usage
         self.strict_dosage = False
     
@@ -63,28 +66,21 @@ def prescribe(current_doctor, patient, drug, message):
                 not_exist = False
                 current_drug = i
         if (not_exist):
-            print("Prescription does not exist!")
+            return False
     usage = time.time()
-    # strict_dosage = input("Please indicate whether patient has a strict dosage (True/False): ")
 
     drug_object = Drug(current_drug,message,usage)
 
-    # if (bool(strict_dosage)):
-    #     drug_object.change_strict()
     patient.assign_drug(drug_object)
     prescribed[patient.firstname + " " + patient.lastname] = current_doctor.name
+    return True
 
-def doctor_login():
-    t = True
-    while (t):
-        doctor_username = input("Please input your username: ")
-        doctor_password = input("Please input your password: ")
-        for i in doctors:
-            if i.username == doctor_username and i.password == doctor_password:
-                return i
-                t = False
-            else:
-                print("Invalid login credentials!")
+def doctor_login(username,password):
+    for i in doctors:
+        if i.username == username and i.password == password:
+            return i
+        else:
+            return False
 
 def check_message():
     for p in prescribed.keys():
@@ -95,18 +91,14 @@ def check_message():
                     print("Sent Text Message")
                     i.drug.usage = time.time()
 
+new_doctor = Doctor("John Smith","John", "Smith", "5555555555")
+doctors.append(new_doctor)
+
+new_patient = Patient("Kyle Bui", "11111111", "5555555555")
+patients.append(new_patient)
+ID_COUNT += 1
 
 if __name__ == '__main__':
-
-    new_doctor = Doctor("John Smith","John", "Smith", "5555555555")
-    doctors.append(new_doctor)
-
-    new_patient = Patient("Kyle Bui", "11111111", "5555555555")
-    patients.append(new_patient)
-    ID_COUNT += 1
-
-    
-    current_doctor = doctor_login()
-
+    pass
 
 
