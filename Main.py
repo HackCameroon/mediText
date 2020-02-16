@@ -44,6 +44,7 @@ def pres():
 
 @app.route('/prescribing', methods = ["POST", "GET"])
 def prescribing():
+    
     if request.method == 'POST':
         drug = request.form['drug']
         dosage = request.form['dosage']
@@ -110,10 +111,12 @@ def incoming_sms():
     if body.lower() == 'yes':
         resp.message("Thank you for telling us! We will notify you when your next dose is.")
     elif body.lower() == 'miss':
-        if (patient.drug.strict_dosage):
+        if (type(patient) == classes.Patient and patient.drug.strict_dosage):
             resp.message("{} has a strict dosage so please try not to miss your next dosage.".format(patient.drug.name.upper()))
-        else:
+        elif(type(patient) == classes.Patient):
             resp.message("Because {} does not have a strict dosage please take the missed dosage and try not to miss your next scheduled dosage.".format(patient.drug.name.upper()))
+        else:
+            resp.message("You are not subscribed to any drugs")
     else:
         resp.message("Invalid response")
     return str(resp)

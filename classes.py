@@ -94,12 +94,6 @@ def check_message():
                     print("Sent Text Message")
                     i.drug.usage = time.time()
 
-new_doctor = Doctor("John Smith","John", "Smith", "5555555555")
-doctors.append(new_doctor)
-
-new_patient = Patient("Kyle Bui", "11111111", "5555555555")
-patients.append(new_patient)
-ID_COUNT += 1
 
 if __name__ == '__main__':
     pass
