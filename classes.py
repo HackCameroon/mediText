@@ -1,4 +1,4 @@
-import time
+
 global patients, doctors, prescribed
 patients = []
 doctors = []
@@ -7,7 +7,6 @@ ID_COUNT = 0
 
 drugs_txt = open("drugs.txt",'r')
 drugs = [(line.lower()).rstrip("\n") for line in drugs_txt.readlines()]
-
 
 class Doctor:
     def __init__(self, name, username, password, phone):
@@ -85,16 +84,6 @@ def doctor_login(username,password):
         if i.username == username and i.password == password:
             return i
     return False
-
-
-def check_message():
-    for p in prescribed.keys():
-        for i in patients:
-            if p.split(" ")[0] == i.firstname and p.split(" ")[1] == i.lastname:
-                current = i
-                if (time.time() - i.drug.usage) >= 30:
-                    print("Sent Text Message")
-                    i.drug.usage = time.time()
 
 
 if __name__ == '__main__':

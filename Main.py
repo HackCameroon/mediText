@@ -30,7 +30,12 @@ def register():
         bday = request.form['bday']
         number = request.form['number']
         classes.add(name, bday, number)
+        return render_template('options.html')
     return render_template('doc.html')
+
+@app.route('/options')
+def options():
+    return render_template('options.html')
 
 @app.route('/prescribe', methods = ["POST", "GET"])
 def pres():
