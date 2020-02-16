@@ -72,7 +72,10 @@ def prescribe(current_doctor, patient, drug, message):
     drug_object = Drug(current_drug,message,usage)
 
     patient.assign_drug(drug_object)
-    prescribed[patient.firstname + " " + patient.lastname] = current_doctor.name
+    if type(current_doctor) == Doctor:
+        prescribed[patient.firstname + " " + patient.lastname] = current_doctor.name
+    else:
+        prescribed[patient.firstname + " " + patient.lastname] = "SELF"
     return True
 
 def doctor_login(username,password):

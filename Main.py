@@ -2,8 +2,11 @@ from flask import Flask, url_for, render_template, request, redirect
 import classes
 import pillSMS as ps
 
+
+new_doctor = classes.Doctor("John Smith","John", "Smith", "5555555555")
 app = Flask(__name__)
-current_patient = ''
+current_patient = ""
+current_doctor = "SELF"
 
 @app.route('/')
 def base():
@@ -43,8 +46,7 @@ def prescribing():
         comments = request.form['comments']
         strict = request.form['strict']
         
-        new_doctor = classes.Doctor("John Smith","John", "Smith", "5555555555")
-        t = classes.prescribe(new_doctor, current_patient, drug, comments)
+        t = classes.prescribe(current_doctor, current_patient, drug, comments)
             
         if (t and strict):
             current_patient.drug.change_strict()
@@ -57,6 +59,7 @@ def prescribing():
 
 @app.route('/success')
 def success():
+    current_doctor = "SELF"
     return render_template('success.html')
 
 @app.route('/incorrect_input')
@@ -65,10 +68,12 @@ def incorrect_input():
 
 @app.route('/login', methods = ["POST", "GET"])
 def login():
+    global current_doctor
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['pass']
         if classes.doctor_login(username, password) != False:
+            current_doctor = classes.doctor_login(username, password)
             return redirect(url_for('doctor_home'))
         else:
             return redirect(url_for('incorrect_input'))
