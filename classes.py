@@ -36,6 +36,7 @@ class Drug:
             self.message = message
         else:
             self.message = "NONE"
+        self.counter = 0
         self.usage = usage
         self.strict_dosage = False
     
@@ -58,7 +59,7 @@ def patient_exist(name, birthday):
     if current_patient == "NA":
         return False
 
-def prescribe(current_doctor, patient, drug, message):
+def prescribe(current_doctor, patient, drug, message, dosage):
     not_exist = True
     current_drug = "NA"
     while (not_exist):
@@ -68,7 +69,7 @@ def prescribe(current_doctor, patient, drug, message):
                 current_drug = i
         if (not_exist):
             return False
-    usage = time.time()
+    usage = dosage
 
     drug_object = Drug(current_drug,message,usage)
 
@@ -83,8 +84,8 @@ def doctor_login(username,password):
     for i in doctors:
         if i.username == username and i.password == password:
             return i
-        else:
-            return False
+    return False
+
 
 def check_message():
     for p in prescribed.keys():

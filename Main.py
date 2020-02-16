@@ -8,6 +8,7 @@ from multiprocessing import Process
 
 
 new_doctor = classes.Doctor("John Smith","John", "Smith", "5555555555")
+classes.doctors.append(new_doctor)
 app = Flask(__name__)
 current_patient = ""
 current_doctor = "SELF"
@@ -49,14 +50,14 @@ def prescribing():
     
     if request.method == 'POST':
         drug = request.form['drug']
-        dosage = request.form['dosage']
+        dosage = int(request.form['dosage'])
         comments = request.form['comments']
         try:
             strict = request.form['strict']
         except:
             strict = False
         
-        t = classes.prescribe(current_doctor, current_patient, drug, comments)
+        t = classes.prescribe(current_doctor, current_patient, drug, comments, dosage)
             
         if (t and strict):
             current_patient.drug.change_strict()
@@ -118,7 +119,9 @@ def incoming_sms():
     # Determine the right reply for this message
     if body.lower() == 'yes':
         resp.message("Thank you for telling us! We will notify you when your next dose is.")
+        patient.drug.counter = 0
         patient.taken = True
+        t = 0
     elif body.lower() == 'miss':
         if (type(patient) == classes.Patient and patient.drug.strict_dosage):
             resp.message("{} has a strict dosage so please try not to miss your next dosage.".format(patient.drug.name.upper()))
@@ -127,8 +130,11 @@ def incoming_sms():
         else:
             resp.message("You are not subscribed to any drugs")
         patient.taken = True
+        patient.drug.counter = 0
+        t = 0
     else:
         resp.message("Invalid response")
+
     return str(resp)
 
 def refresh_all():
@@ -144,13 +150,30 @@ def scheduledTask():
         for i in classes.patients:
             if p.split(" ")[0] == i.firstname and p.split(" ")[1] == i.lastname:
                 current = i
-                if current.taken == False and t == 0:
+                current.drug.counter += 7
+                if current.taken == False and t == 0 and current.drug.counter >= current.drug.usage:
                     ps.send(current)
                     t += 1
-                elif current.taken == False and t == 1:
+                    current.drug.counter = 0
+                elif current.taken == False and t >= 1 and current.drug.counter >= current.drug.usage:
                     ps.second(current)
                     current.taken = True
                     t = 0
+                    current.drug.counter = 0
+    al = True
+    for p in classes.prescribed.keys():
+        for i in classes.patients:
+            if p.split(" ")[0] == i.firstname and p.split(" ")[1] == i.lastname:
+                current2 = i
+                if current2.taken == False:
+                    al  = False
+    if al:
+        refresh_all()
+        t = 0 
+
+    
+
+                
 
                 
                 
@@ -158,7 +181,7 @@ def scheduledTask():
 
    
 if __name__ == "__main__":
-    scheduler.add_job(id='Scheduled Task', func=scheduledTask, trigger='interval',seconds=5)
+    scheduler.add_job(id='Scheduled Task', func=scheduledTask, trigger='interval',seconds=7)
     refresh_all()
     scheduler.start()
     app.run(debug=True)
