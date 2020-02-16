@@ -1,4 +1,5 @@
 from flask import Flask, url_for, render_template, request, redirect
+from flask_apscheduler import APScheduler
 import classes
 import pillSMS as ps
 from twilio.rest import Client
@@ -6,15 +7,16 @@ from twilio.twiml.messaging_response import MessagingResponse
 from multiprocessing import Process
 
 
-
 new_doctor = classes.Doctor("John Smith","John", "Smith", "5555555555")
 app = Flask(__name__)
 current_patient = ""
 current_doctor = "SELF"
+scheduler = APScheduler()
+t = 0
 
 @app.route('/')
 def base():
-    return render_template('base.html')
+    return render_template('home.html')
 
 @app.route('/home')
 def home():
@@ -99,10 +101,16 @@ def doctor_home():
 
 @app.route("/sms", methods=['GET', 'POST'])
 def incoming_sms():
+    global t
     patient = current_patient
     """Send a dynamic reply to an incoming text message"""
     # Get the message the user sent our Twilio number
     body = request.values.get('Body', None)
+    phone = request.values.get('From',None)
+    for p in classes.prescribed.keys():
+        for i in classes.patients:
+            if p.split(" ")[0] == i.firstname and p.split(" ")[1] == i.lastname and phone == i.phone:
+                patient = i
 
     # Start our TwiML response
     resp = MessagingResponse()
@@ -110,6 +118,7 @@ def incoming_sms():
     # Determine the right reply for this message
     if body.lower() == 'yes':
         resp.message("Thank you for telling us! We will notify you when your next dose is.")
+        patient.taken = True
     elif body.lower() == 'miss':
         if (type(patient) == classes.Patient and patient.drug.strict_dosage):
             resp.message("{} has a strict dosage so please try not to miss your next dosage.".format(patient.drug.name.upper()))
@@ -117,10 +126,39 @@ def incoming_sms():
             resp.message("Because {} does not have a strict dosage please take the missed dosage and try not to miss your next scheduled dosage.".format(patient.drug.name.upper()))
         else:
             resp.message("You are not subscribed to any drugs")
+        patient.taken = True
     else:
         resp.message("Invalid response")
     return str(resp)
-   
 
+def refresh_all():
+    for p in classes.prescribed.keys():
+        for i in classes.patients:
+            if p.split(" ")[0] == i.firstname and p.split(" ")[1] == i.lastname:
+                current = i
+                current.taken = False
+
+def scheduledTask():
+    global t
+    for p in classes.prescribed.keys():
+        for i in classes.patients:
+            if p.split(" ")[0] == i.firstname and p.split(" ")[1] == i.lastname:
+                current = i
+                if current.taken == False and t == 0:
+                    ps.send(current)
+                    t += 1
+                elif current.taken == False and t == 1:
+                    ps.second(current)
+                    current.taken = True
+                    t = 0
+
+                
+                
+
+
+   
 if __name__ == "__main__":
+    scheduler.add_job(id='Scheduled Task', func=scheduledTask, trigger='interval',seconds=5)
+    refresh_all()
+    scheduler.start()
     app.run(debug=True)

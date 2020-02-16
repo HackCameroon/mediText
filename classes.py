@@ -1,5 +1,5 @@
 import time
-
+global patients, doctors, prescribed
 patients = []
 doctors = []
 prescribed = {}
@@ -24,6 +24,7 @@ class Patient:
         self.birthday = birthday
         self.phone = phone
         self.ID = ID_COUNT
+        self.taken = False
 
     def assign_drug(self, drug):
         self.drug = drug
