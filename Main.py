@@ -1,6 +1,10 @@
 from flask import Flask, url_for, render_template, request, redirect
 import classes
 import pillSMS as ps
+from twilio.rest import Client
+from twilio.twiml.messaging_response import MessagingResponse
+from multiprocessing import Process
+
 
 
 new_doctor = classes.Doctor("John Smith","John", "Smith", "5555555555")
@@ -91,6 +95,29 @@ def login():
 @app.route('/doctor_home')
 def doctor_home():
     return render_template('doctor_home.html')
+
+@app.route("/sms", methods=['GET', 'POST'])
+def incoming_sms():
+    patient = current_patient
+    """Send a dynamic reply to an incoming text message"""
+    # Get the message the user sent our Twilio number
+    body = request.values.get('Body', None)
+
+    # Start our TwiML response
+    resp = MessagingResponse()
+
+    # Determine the right reply for this message
+    if body.lower() == 'yes':
+        resp.message("Thank you for telling us! We will notify you when your next dose is.")
+    elif body.lower() == 'miss':
+        if (patient.drug.strict_dosage):
+            resp.message("{} has a strict dosage so please try not to miss your next dosage.".format(patient.drug.name.upper()))
+        else:
+            resp.message("Because {} does not have a strict dosage please take the missed dosage and try not to miss your next scheduled dosage.".format(patient.drug.name.upper()))
+    else:
+        resp.message("Invalid response")
+    return str(resp)
+   
 
 if __name__ == "__main__":
     app.run(debug=True)
