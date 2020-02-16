@@ -24,9 +24,14 @@ class Patient:
         self.phone = phone
         self.ID = ID_COUNT
         self.taken = False
+        self.drug = Drug('None', 'None',0)
+        self.doctor = "NONE"
 
     def assign_drug(self, drug):
         self.drug = drug
+        
+    def assign_doctor(self, doctor):
+        self.doctor = doctor
 
 class Drug:
     def __init__(self, name, message, usage):
@@ -75,6 +80,7 @@ def prescribe(current_doctor, patient, drug, message, dosage):
     patient.assign_drug(drug_object)
     if type(current_doctor) == Doctor:
         prescribed[patient.firstname + " " + patient.lastname] = current_doctor.name
+        patient.assign_doctor(current_doctor.name)
     else:
         prescribed[patient.firstname + " " + patient.lastname] = "SELF"
     return True

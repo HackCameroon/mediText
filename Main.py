@@ -8,16 +8,22 @@ from multiprocessing import Process
 
 
 new_doctor = classes.Doctor("John Smith","John", "Smith", "5555555555")
+new_doctor1 = classes.Doctor("Jane Doe","Jane", "Doe", "4444444444")
 classes.doctors.append(new_doctor)
+classes.doctors.append(new_doctor1)
 app = Flask(__name__)
 current_patient = ""
 current_doctor = "SELF"
-scheduler = APScheduler()
+scheduler = APScheduler()  
 t = 0
 
 @app.route('/')
 def base():
     return render_template('home.html')
+
+@app.route('/display')
+def display():
+    return render_template("display.html", patients=classes.patients)
 
 @app.route('/home')
 def home():
