@@ -44,7 +44,10 @@ def prescribing():
         drug = request.form['drug']
         dosage = request.form['dosage']
         comments = request.form['comments']
-        strict = request.form['strict']
+        try:
+            strict = request.form['strict']
+        except:
+            strict = False
         
         t = classes.prescribe(current_doctor, current_patient, drug, comments)
             
@@ -54,16 +57,22 @@ def prescribing():
             return redirect(url_for('success'))
         elif(t == False):
             return redirect(url_for('incorrect_input'))
+        else:
+            ps.send_message(current_patient)
+            return redirect(url_for('success'))
 
     return render_template('prescribing.html')
 
 @app.route('/success')
 def success():
+    global current_doctor
     current_doctor = "SELF"
     return render_template('success.html')
 
 @app.route('/incorrect_input')
 def incorrect_input():
+    global current_doctor
+    current_doctor = "SELF"
     return render_template('incorrect_input.html')
 
 @app.route('/login', methods = ["POST", "GET"])
