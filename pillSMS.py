@@ -13,11 +13,11 @@ def send_message(patient):
 
 def send(patient):
     client = Client("ACc0304e02373de6ce19ae6d5c3e9e2fa2", "dfef0a24cdb05d648c80cf67bf44cbd5")
-    client.messages.create(to=patient.phone, from_="+13344588868", body=("Hi {}. This is a message to remind you to take {}. Please reply if you 'YES' if you have taken the drug. Included doctor message: {}").format((patient.firstname + " " +patient.lastname).upper(), patient.drug.name.upper(), patient.drug.message))
+    client.messages.create(to=patient.phone, from_="+13344588868", body=("Hi {}. This is a message to remind you to take {}. Please reply 'YES' if you have taken the drug. Included doctor message: {}").format((patient.firstname + " " +patient.lastname).upper(), patient.drug.name.upper(), patient.drug.message))
 
 def second(patient):
     client = Client("ACc0304e02373de6ce19ae6d5c3e9e2fa2", "dfef0a24cdb05d648c80cf67bf44cbd5")
-    client.messages.create(to=patient.phone, from_="+13344588868", body=("Hi {}. This is a second message to remind you to take {}. Please reply if you 'YES' if you have taken the drug or 'MISS' 10 minutes have passed since your first text reminder.").format(patient.firstname +" "+ patient.lastname, patient.drug.name.upper()))
+    client.messages.create(to=patient.phone, from_="+13344588868", body=("Hi {}. This is a second message to remind you to take {}. Please reply 'YES' if you have taken the drug or 'MISS' 10 minutes have passed since your first text reminder.").format((patient.firstname +" "+ patient.lastname).upper(), patient.drug.name.upper()))
 
 # app = Flask(__name__)
 
